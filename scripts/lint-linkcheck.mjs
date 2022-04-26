@@ -7,9 +7,19 @@ import htmlparser2 from 'htmlparser2';
  * Contains all link checking logic.
  */
 class BrokenLinkChecker {
-	constructor ({ baseUrl, buildOutputDir }) {
+	constructor ({
+		baseUrl,
+		buildOutputDir,
+		pageSourceDir,
+		annotateOutput = false
+	}) {
 		this.baseUrl = baseUrl;
 		this.buildOutputDir = buildOutputDir;
+		this.pageSourceDir = pageSourceDir;
+		this.annotateOutput = annotateOutput;
+
+		this.prefixPage = kleur.gray(`[${kleur.red().bold('404')}]`);
+		this.prefixHash = kleur.gray(`[${kleur.yellow().bold(' # ')}]`);
 	}
 
 	/**
@@ -86,11 +96,15 @@ class BrokenLinkChecker {
 			.map(el => el.attribs.id);
 		const hashes = [...anchorNames, ...ids]
 			.map(name => `#${name}`);
-		
+
+		// Attempt to determine the source file the current page was likely generated from
+		var sourceFilePath = this.pathnameToSourceFilePath(pathname);
+
 		return {
 			pathname,
 			href,
 			htmlFilePath,
+			sourceFilePath,
 			linkHrefs,
 			hashes,
 		};
@@ -148,8 +162,6 @@ class BrokenLinkChecker {
 		if (totalBroken > 0) {
 			const brokenHashCount = brokenLinks.filter(brokenLink => brokenLink.isMissingHash).length;
 			const brokenPageCount = totalBroken - brokenHashCount;
-			const prefixPage = kleur.gray(`[${kleur.red().bold('404')}]`);
-			const prefixHash = kleur.gray(`[${kleur.yellow().bold(' # ')}]`);
 
 			var lastPage;
 			brokenLinks.forEach(brokenLink => {
@@ -157,20 +169,43 @@ class BrokenLinkChecker {
 					console.log(`\n${brokenLink.page.pathname}`);
 					lastPage = brokenLink.page;
 				}
-				console.log(`  ${brokenLink.isMissingHash ? prefixHash : prefixPage} ${brokenLink.href}`);
+				this.outputBrokenLink(brokenLink);
 			});
 			console.log();
 
 			const summary = [
 				`*** Found ${totalBroken} broken ${totalBroken === 1 ? 'link' : 'links'} in total:`,
-				`  ${prefixPage} ${brokenPageCount} broken page ${brokenPageCount === 1 ? 'link' : 'links'}`,
-				`  ${prefixHash} ${brokenHashCount} broken fragment ${brokenHashCount === 1 ? 'link' : 'links'}`,
+				`  ${this.prefixPage} ${brokenPageCount} broken page ${brokenPageCount === 1 ? 'link' : 'links'}`,
+				`  ${this.prefixHash} ${brokenHashCount} broken fragment ${brokenHashCount === 1 ? 'link' : 'links'}`,
 			];
 			console.log(kleur.white().bold(summary.join('\n')));
 		} else {
 			console.log(kleur.green().bold('*** Found no broken links. Great job!'));
 		}		
 		console.log();
+	}
+
+	outputBrokenLink (brokenLink) {
+		console.log(`  ${brokenLink.isMissingHash ? this.prefixHash : this.prefixPage} ${brokenLink.href}`);
+		if (this.annotateOutput) {
+			const absoluteSourceFilePath = brokenLink.page.sourceFilePath &&
+				path.resolve(brokenLink.page.sourceFilePath);
+			this.outputWorkflowCommand({
+				type: 'error',
+				message: brokenLink.href,
+				params: {
+					file: absoluteSourceFilePath,
+					title: `${brokenLink.isMissingHash ? 'Broken fragment' : '404 link'} in ${brokenLink.page.pathname}`,
+				},
+			});
+		}
+	}
+
+	outputWorkflowCommand ({ type, message, params = {} }) {
+		const serializedParams = Object.keys(params).map(key => {
+			return `${key}=${params[key]}`;
+		}).join(',');
+		console.log(`::${type}${serializedParams ? ` ${serializedParams}` : ''}::${message}`);
 	}
 
 	pathnameToHref (pathname) {
@@ -181,12 +216,33 @@ class BrokenLinkChecker {
 	pathnameToHtmlFilePath (pathname) {
 		return path.join(this.buildOutputDir, pathname, 'index.html');
 	}
+
+	/**
+	 * Attempts to determine the source file path used to generate the given route `pathname`.
+	 * 
+	 * Given a route pathname of `/path/to/route/`, the source file will be searched
+	 * in the following locations below `pageSourceDir`:
+	 * - `path/to/route.md`
+	 * - `path/to/route/index.md`
+	 * 
+	 * @returns The source file path, or `undefined` if it cannot be found.
+	 */
+	pathnameToSourceFilePath (pathname) {
+		const possiblePaths = [
+			path.join(this.pageSourceDir, pathname, '.') + '.md',
+			path.join(this.pageSourceDir, pathname, 'index.md'),
+		];
+		
+		return possiblePaths.find(possiblePath => fs.existsSync(possiblePath));
+	}
 }
 
 // Use our class to check for broken links
 const brokenLinkChecker = new BrokenLinkChecker({
 	baseUrl: 'https://docs.astro.build',
 	buildOutputDir: './dist',
+	pageSourceDir: './src/pages',
+	annotateOutput: process.env.GITHUB_ACTION !== undefined,
 });
 
 brokenLinkChecker.run();
