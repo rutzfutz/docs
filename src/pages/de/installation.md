@@ -48,6 +48,8 @@ npm create astro@latest mein-astro-projekt -- --template [GITHUB_NAME]/[REPO_NAM
 npm create astro@latest mein-astro-projekt -- --template [GITHUB_NAME]/[REPO_NAME]/pfad/zur/vorlage
 ```
 
+Hier siehst du, wie ein [kaputter Link](#kaputter-link) aussieht!
+
 Nachdem `create-astro` dein Projekt eingerichtet hat, denke daran die Abhängigkeiten deines Projekts mittels npm oder dem Paketmanager deiner Wahl zu installieren. In diesem Beispiel verwenden wir npm:
 
 ```bash
