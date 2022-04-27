@@ -179,6 +179,9 @@ class BrokenLinkChecker {
 				`  ${this.prefixHash} ${brokenHashCount} broken fragment ${brokenHashCount === 1 ? 'link' : 'links'}`,
 			];
 			console.log(kleur.white().bold(summary.join('\n')));
+
+			// Set a non-zero exit code to indicate that broken links were found
+			process.exitCode = 1;
 		} else {
 			console.log(kleur.green().bold('*** Found no broken links. Great job!'));
 		}		
