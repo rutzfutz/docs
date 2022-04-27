@@ -99,6 +99,7 @@ class BrokenLinkChecker {
 
 		// Attempt to determine the source file the current page was likely generated from
 		var sourceFilePath = this.pathnameToSourceFilePath(pathname);
+		console.log(`Converted pathname="${pathname}" to sourceFilePath="${sourceFilePath}"`);
 
 		return {
 			pathname,
@@ -208,6 +209,7 @@ class BrokenLinkChecker {
 		const serializedParams = Object.keys(params).map(key => {
 			return `${key}=${params[key]}`;
 		}).join(',');
+		console.log(`outputting type=${type} with params=${serializedParams ? ` ${serializedParams}` : ''} and message=${message}`);
 		console.log(`::${type}${serializedParams ? ` ${serializedParams}` : ''}::${message}`);
 	}
 
