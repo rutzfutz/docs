@@ -6,7 +6,7 @@ description: Multiple different methods to deploy a website with Astro.
 
 The following guides are based on some shared assumptions:
 
-- You are using the default build output location (`dist/`). This location [can be changed using the `dist` configuration option](/en/reference/configuration-reference).
+- You are using the default build output location (`dist/`). This location [can be changed using the `dist` configuration option](/break-this-link/).
 - You are using npm. You can use equivalent commands to run the scripts if you are using Yarn or other package managers.
 - Astro is installed as a local dev dependency in your project, and you have set up the following npm scripts:
 
