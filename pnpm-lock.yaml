@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@actions/core': ^1.7.0
   '@algolia/client-search': ^4.13.0
   '@astrojs/preact': ^0.0.2
   '@astrojs/react': ^0.1.0
@@ -29,6 +30,7 @@ dependencies:
   sass: 1.50.0
 
 devDependencies:
+  '@actions/core': 1.7.0
   '@algolia/client-search': 4.13.0
   '@astrojs/preact': 0.0.2_@babel+core@7.17.9+preact@10.7.1
   '@astrojs/react': 0.1.0_f370f735164a03a12cea0cc89593cbee
@@ -45,6 +47,18 @@ devDependencies:
   react-dom: 17.0.2_react@17.0.2
 
 packages:
+
+  /@actions/core/1.7.0:
+    resolution: {integrity: sha512-7fPSS7yKOhTpgLMbw7lBLc1QJWvJBBAgyTX2PEhagWcKK8t0H8AKCoPMfnrHqIm5cRYH4QFPqD1/ruhuUE7YcQ==}
+    dependencies:
+      '@actions/http-client': 1.0.11
+    dev: true
+
+  /@actions/http-client/1.0.11:
+    resolution: {integrity: sha512-VRYHGQV1rqnROJqdMvGUbY/Kn8vriQe/F9HR2AlYHzmKuM/p3kjNuXhmdBfcVgsvRWTz5C5XW5xvndZrVBuAYg==}
+    dependencies:
+      tunnel: 0.0.6
+    dev: true
 
   /@algolia/autocomplete-core/1.5.2:
     resolution: {integrity: sha512-DY0bhyczFSS1b/CqJlTE/nQRtnTAHl6IemIkBy0nEWnhDzRDdtdx4p5Uuk3vwAFxwEEgi1WqKwgSSMx6DpNL4A==}
@@ -4013,6 +4027,11 @@ packages:
     hasBin: true
     dependencies:
       esbuild: 0.14.25
+    dev: true
+
+  /tunnel/0.0.6:
+    resolution: {integrity: sha512-1h/Lnq9yajKY2PEbBadPXj3VxsDDu844OnaAo52UVmIzIvwwtBPIuNvkjuzBlTWpfJyUbG3ez0KSBibQkj4ojg==}
+    engines: {node: '>=0.6.11 <=0.7.0 || >=0.7.3'}
     dev: true
 
   /type-fest/0.13.1:

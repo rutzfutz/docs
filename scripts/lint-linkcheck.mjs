@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import kleur from 'kleur';
 import htmlparser2 from 'htmlparser2';
+import * as core from '@actions/core';
 
 /**
  * Contains all link checking logic.
@@ -194,14 +195,18 @@ class BrokenLinkChecker {
 		if (this.annotateOutput) {
 			const absoluteSourceFilePath = brokenLink.page.sourceFilePath &&
 				path.resolve(brokenLink.page.sourceFilePath);
-			this.outputWorkflowCommand({
-				type: 'error',
-				message: brokenLink.href,
-				params: {
-					file: absoluteSourceFilePath,
-					title: `${brokenLink.isMissingHash ? 'Broken fragment' : '404 link'} in ${brokenLink.page.pathname}`,
-				},
+			core.error(brokenLink.href, {
+				title: `${brokenLink.isMissingHash ? 'Broken fragment' : '404 link'} in ${brokenLink.page.pathname}`,
+				file: absoluteSourceFilePath,
 			});
+			// this.outputWorkflowCommand({
+			// 	type: 'error',
+			// 	message: brokenLink.href,
+			// 	params: {
+			// 		file: absoluteSourceFilePath,
+			// 		title: `${brokenLink.isMissingHash ? 'Broken fragment' : '404 link'} in ${brokenLink.page.pathname}`,
+			// 	},
+			// });
 		}
 	}
 

@@ -16,6 +16,7 @@
     "lint:linkcheck:nobuild": "node ./scripts/lint-linkcheck.mjs"
   },
   "devDependencies": {
+    "@actions/core": "^1.7.0",
     "@algolia/client-search": "^4.13.0",
     "@astrojs/preact": "^0.0.2",
     "@astrojs/react": "^0.1.0",
