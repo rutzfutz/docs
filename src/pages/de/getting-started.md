@@ -60,7 +60,7 @@ Jetzt kannst du loslegen und Inhalte und Funktionen zu deiner Seite hinzufügen:
 
 🏗️ Erzeuge dein erstes [Layout](/de/core-concepts/layouts), um deinen Seiten einen gemeinsamen Rahmen zu geben.
 
-🏗️ Nutze [CSS & Styling](/de/guides/styling/), um die Optik deiner Seite zu verändern.
+🏗️ Nutze [CSS & Styling](/de-DE/invalid/link/), um die Optik deiner Seite zu verändern.
 
 *...weitere Möglichkeiten findest du im Abschnitt **Funktionen**!*
 
