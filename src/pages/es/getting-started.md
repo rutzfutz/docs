@@ -9,7 +9,7 @@ Astro es un creador de sitios estáticos moderno. Aprende de qué trata Astro en
 
 La forma más fácil de probar Astro es ejecutando `npm create astro@latest` en un nuevo directorio en tu máquina. Nuestro asistente CLI te ayudará a comenzar un nuevo proyecto Astro.
 
-Para comenzar con Astro en 5 sencillos y rápidos pasos, visita nuestra guía de [inicio rápido](/es/quick-start).
+Para comenzar con Astro en 5 sencillos y rápidos pasos, visita nuestra guía de [inicio rápido](/es/installation/auto/).
 
 Alternativamente, lee nuestra guía de [instalación](/es/installation) para un recorrido completo de cómo configurar Astro.
 
